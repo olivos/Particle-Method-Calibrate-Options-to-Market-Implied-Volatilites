@@ -50,8 +50,8 @@ int main() {
 	double K = 1; /* strike */
 
 
-	realSpace T{0,maturity,2}; /* Time space */
-	Mknpaths P{T,1,a,b,sdup,1000};
+	realSpace T{0,maturity,125}; /* Time space */
+	Mknpaths P{T,1,a,b,sdup,100};
 
-//	cout << '\n'<<P.getPath(0);
+	cout << '\n'<<P.getPath(99);
 }

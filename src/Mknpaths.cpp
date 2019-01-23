@@ -47,18 +47,18 @@ Mknpaths::Mknpaths(const realSpace & T,const double & S0,
 //      j = 1
 		{
 			int j{1};
-				cout << "before sorting\n";
+//				cout << "before sorting\n";
+//
+//				for(int i = 0  ; i != N ; ++i ){
+//					cout << Paths[i]<<'\n';
+//				}
 
-				for(int i = 0  ; i != N ; ++i ){
-					cout << Paths[i]<<'\n';
-				}
 
 
-
-				cout << "after sorting\n";
-				for(int i = 0  ; i != N ; ++i ){
-					cout << Paths[i]<<'\n';
-				}
+//				cout << "after sorting\n";
+//				for(int i = 0  ; i != N ; ++i ){
+//					cout << Paths[i]<<'\n';
+//				}
 
 
 				for(int i = 0 ; i != N ; ++i){
@@ -71,23 +71,20 @@ Mknpaths::Mknpaths(const realSpace & T,const double & S0,
 
 
 		for(int j = 2 ; j != T.getNx()+1 ; ++j){
-
-			cout << "before sorting\n";
-
 			double h = 1.5*S0*sqrt(max(T(j),0.25))*pow(N,-1./5);
 
-
-			for(int i = 0  ; i != N ; ++i ){
-				cout << Paths[i]<<'\n';
-			}
+//			cout << "before sorting\n";
+//			for(int i = 0  ; i != N ; ++i ){
+//				cout << Paths[i]<<'\n';
+//			}
 
 			sort(Paths.begin(),Paths.end(),[M](arma::vec a, arma::vec b){if(a(M-1) < b(M-1)){return 1;}return 0;});
 			/* Is mixing the seeds an issue ? */
 
-			cout << "after sorting\n";
-			for(int i = 0  ; i != N ; ++i ){
-				cout << Paths[i]<<'\n';
-			}
+//			cout << "after sorting\n";
+//			for(int i = 0  ; i != N ; ++i ){
+//				cout << Paths[i]<<'\n';
+//			}
 
 			for(int i = 0 ; i != N ; ++i){
 				Paths[i](j) = Paths[i](j-1) + a(T(j),Paths[i],j-1)*T.getHx() + Paths[i](j-1)*b(T(j),Paths[i],j-1)*leverage(i,j,h)*sqrt(T.getHx())*Z(generators[i]);
