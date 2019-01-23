@@ -5,16 +5,19 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/Mcoption.cpp \
+../src/Mknpaths.cpp \
 ../src/Sdepaths.cpp \
 ../src/particle.cpp 
 
 OBJS += \
 ./src/Mcoption.o \
+./src/Mknpaths.o \
 ./src/Sdepaths.o \
 ./src/particle.o 
 
 CPP_DEPS += \
 ./src/Mcoption.d \
+./src/Mknpaths.d \
 ./src/Sdepaths.d \
 ./src/particle.d 
 
