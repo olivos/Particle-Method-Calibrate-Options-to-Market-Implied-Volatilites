@@ -28,6 +28,8 @@ public:
 	const arma::vec & getPath (const int & i) const{
 		return Paths[i];
 	}
+	double E(const double & t, double (&f) (const double &) = Ide ) const;
+
 
 
 private:
@@ -46,6 +48,9 @@ private:
 		if( abs(x) < 1  ){
 			return 15./16/h *pow(1-pow(x/h,2),2) ;}
 		return 0;
+	}
+	static double Ide(const double & x) {
+		return x;
 	}
 
 

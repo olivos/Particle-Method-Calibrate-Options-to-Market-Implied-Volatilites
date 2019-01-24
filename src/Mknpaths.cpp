@@ -22,7 +22,7 @@ Mknpaths::Mknpaths(const realSpace & T,const double & S0,
 		if(N > 10000){
 			throw "maximum 10 000 paths";
 		}
-		const int M(T.getNx()+2);
+		const int M(T.getNx()+1);
 		Paths = vector<arma::vec>(N,vec(M)); /* Last column stores the most recently
 		calculated value for each row in order to enable a sort on spot val*/
 		minIndexes = vec(N,fill::zeros);
@@ -73,6 +73,8 @@ Mknpaths::Mknpaths(const realSpace & T,const double & S0,
 		for(int j = 2 ; j != T.getNx()+1 ; ++j){
 			double h = 1.5*S0*sqrt(max(T(j),0.25))*pow(N,-1./5);
 
+			cout << '|';
+
 //			cout << "before sorting\n";
 //			for(int i = 0  ; i != N ; ++i ){
 //				cout << Paths[i]<<'\n';
@@ -101,6 +103,17 @@ Mknpaths::Mknpaths(const realSpace & T,const double & S0,
 
 Mknpaths::~Mknpaths() {
 	// TODO Auto-generated destructor stub
+}
+
+double Mknpaths::E(const double& t, double (&f)(const double&)) const {
+
+	double res{0};
+	int j = round( (t-T.getXi()) /T.getHx() );
+
+	for(int i = 0 ; i != N ; ++i){
+	res += f( Paths[i](j) );
+	}
+	return res/N;
 }
 
 double Mknpaths::leverage(const int& i, const int& j,const double & h) {
