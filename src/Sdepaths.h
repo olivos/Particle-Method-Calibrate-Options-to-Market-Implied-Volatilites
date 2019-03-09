@@ -23,6 +23,7 @@ public:
 			double (&b) (const double & t, const arma::vec & Path,const int & end),
 			const int & N);
 	const arma::vec & getPath (const int & i) const;
+	const arma::mat getPathsMat () const;
 	double E(const double & t, double (&f) (const double &) = Ide ) const;
 	double V(const double & t) const;
 	vfun pdf(const double & t, int n = 100) ;

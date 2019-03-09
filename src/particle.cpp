@@ -6,6 +6,7 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
+
 #include <iostream>
 #include <random>
 
@@ -19,71 +20,81 @@ using namespace std;
 using namespace arma;
 using namespace vSpace;
 
+const double sigmaR = 0.3; /* Realized vol */
+const double mu = 0.;
+
+//Drift term
 double a(const double& t,const arma::vec& Path, const int& end){
-	return 0;
+	return mu;
 }
+//sigma term
+double b2(const double& t,const arma::vec& Path, const int& end){
+	return Path(end)*0.15;
+}
+
 double b(const double& t,const arma::vec& Path, const int& end){
 	int i = max(0,end - 20);
 	if(Path(end) > mean(Path.subvec(i,end))  ){
-		return 0.10;
+		return Path(end)*0.10; /* Low vol */
 	}
 	else{
-		return 0.20;
+		return Path(end)*0.20; /* high vol */
 	}
 }
-//double b(const double& t,const arma::vec& Path, const int& end){
-//	return 0.2;
-//}
+double price(const double & t){
+	return 100.;
+}
 
-double sdup(const double& t, const double& St ){
-	return 0.3;
+double pay(const double& x, const double & K){
+	return (x-K)>0 ? (x-K):0;
 }
-double K = 1; /* strike */
-double d{0.01};
 
+double f(const double & t){
+	return 100;
+}
 
-double pay2( const double & x){
-	return (x>K+d)?(x-K-d):0;
-}
-double pay1( const double & x){
-	return (x>K)?(x-K):0;
-}
-double pay0( const double & x){
-	return (x>K-d)?(x-K+d):0;
-}
 int main() {
 
-	double maturity = 1; /* maturity in years : here 3 months */
 
-	double r = 0; /* risk free interest rate */
-	double q = 0; /* continuous dividend */
-
-
-	realSpace T{0,maturity,125}; /* Time space */
-//	Mknpaths P{T,1,a,b,sdup,1000};
+	const double maturity = 1; /* maturity in years : here 3 months */
+	const double r = 0;
+	const double t = 0.;
+	realSpace T{0,maturity,250}; /* Time space */
 
 
-//	double CT0 =  P.E(0.8-d,pay1);
-//	double CT2 =  P.E(0.8+d,pay1);
+
+	Sdepaths P{T,100,a,b2,10000};
+
+	fun S{T,f};
+
+	Mcoption C(S,100.,r,P,pay);
+
+	cout << C(t) <<'\n';
+
+	cout <<func::callprice(100., 100., 0., maturity,  t,0.15);
+
+
+	vfun dist = P.pdf(maturity,20);
+
+//// Defining the option
+//	fun S{T,price};
+//	const int nK = 100;
+//	realSpace K{100,1000,nK-1};
+//	const int nT = 30;
+//	realSpace Times{0.,0.9,nT-1};
 //
-//
-//	double CK0 =  P.E(0.8,pay0);
-//	double CK1 =  P.E(0.8,pay1);
-//	double CK2 =  P.E(0.8,pay2);
+//	mat Z(nK,nT,fill::zeros);
+//	for(int i = 0 ; i != nK ; ++i){
+//		Mcoption C(S,K(i),r,P,pay);
+//	for(int j = 0 ; j!= nT ; ++j  ){
+////		cout <<C(maturity-Times(j))<< ' ';
+//		Z(i,j) = C(maturity-Times(j));
+//		}
+//	}
 
-	double CT0 =  func::callprice(1,K,r,0.8-d,0,0.3,q);
-	double CT2 =  func::callprice(1,K,r,0.8+d,0,0.3,q);
+//	dataframe d{Z};
+//	d.write_csv("Zpricesf.csv");
 
-	double CK0 =  func::callprice(1,K-d,r,0.8,0,0.3,q);
-	double CK1 =  func::callprice(1,K,r,0.8,0,0.3,q);
-	double CK2 =  func::callprice(1,K+d,r,0.8,0,0.3,q);
-
-//	0.0863425
-
-
-	double dT = (CT2 - CT0)/(2*d);
-	double ddK = (CK2 - 2*CK1 + CK0)/pow(d,2);
-
-	cout << sqrt( 2*dT/(pow(K,2)*ddK) );
-
+//	cout << Times << '\n';
+//	cout << K << '\n';
 }

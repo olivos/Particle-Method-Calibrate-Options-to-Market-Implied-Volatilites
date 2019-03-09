@@ -111,4 +111,15 @@ vfun Sdepaths::pdf(const double& t, int n) {
 	return vfun(realSpace(-semirange,semirange,n),proba);
 }
 
+const arma::mat Sdepaths::getPathsMat() const {
+	int p = T.getNx()+1;
+	mat Paths_mat(N,p);
+	for(int i = 0 ; i != N ; ++i){
+		for(int j = 0 ; j != p ; ++j){
+			Paths_mat(i,j) = Paths[i](j);
+		}
+	}
+	return Paths_mat;
+}
+
 } /* namespace vSpace */
