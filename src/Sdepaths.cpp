@@ -18,38 +18,25 @@ Sdepaths::Sdepaths(const realSpace& T,const double & S0,
 		double (&b)(const double& t, const arma::vec& Path, const int& end),
 		const int& N):T(T),a(a),b(b),N(N),proba(),logprice()
 {
-	if(N > 10000){
-		throw "maximum 10 000 paths";
-	}
 	Paths = vector<arma::vec>(N,vec(T.getNx()+1));
-//	t= 0
-	vector<mt19937> generators;
-	generators.reserve(N);
+//	vector<mt19937> generators;
+//	generators.reserve(N);
+	mt19937_64 g{};
 
-	string temp{};
-	ifstream ip("10kseeds.txt");
 
 	for(int i = 0 ; i != N ; ++i){
 		Paths[i](0) = S0; /* Intialize */
-		getline(ip,temp,'\n');
-		generators.push_back(mt19937( stoi(temp)  )); /* seed the mersenne twisters */
+
 	}
-	ip.close();
 
-	normal_distribution<double> Z;
-
-	for(int j = 1 ; j != T.getNx()+1 ; ++j){
-		for(int i = 0 ; i != N ; ++i){
-			Paths[i](j) = Paths[i](j-1) + a(T(j),Paths[i],j-1)*T.getHx() + b(T(j),Paths[i],j-1)*sqrt(T.getHx())*Z(generators[i]);
+	std::normal_distribution<double> Z;
+	for(int i = 0 ; i != N ; ++i){
+		for(int j = 1 ; j != T.getNx()+1 ; ++j){
+			Paths[i](j) = Paths[i](j-1) + a(T(j),Paths[i],j-1)*T.getHx() + b(T(j),Paths[i],j-1)*sqrt(T.getHx())*Z(g);
 //			Paths[i](j) = (generators[i])();
 
 		}
 	}
-
-
-//	for(vector<arma::vec>::iterator it = Paths.begin(); it != Paths.end(); ++it){
-//		cout << *it << '\n';
-//	}
 
 
 

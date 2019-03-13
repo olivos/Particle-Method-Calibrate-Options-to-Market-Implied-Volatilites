@@ -21,7 +21,7 @@ Mcoption::~Mcoption() {
 double Mcoption::operator ()(const double& t) const {
 	double res{0};
 	int N = P.getN();
-	int j = round( (T) /deltas(0) );
+	int j = round( (T-t) /deltas(0) );
 	for(int i = 0 ; i != N ; ++i){
 		res += exp(-r*(T-t))* payoff( P.getPath(i)(j),K );
 	}
