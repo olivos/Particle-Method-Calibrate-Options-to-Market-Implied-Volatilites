@@ -29,6 +29,7 @@ inline double a(const double& t,const arma::vec& Path, const int& end){
 	return mu;
 }
 //sigma term
+
 inline double b2(const double& t,const arma::vec& Path, const int& end){
 	return Path(end)*0.15;
 }
@@ -61,6 +62,11 @@ inline double price(const double & t){
 inline double pay(const double& x, const double & K){
 	return (x-K)>0 ? (x-K):0;
 }
+
+double err (const arma::vec & K,const arma::vec & prices, const arma::mat & v){
+
+}
+
 arma::vec grad(const arma::vec & K, const arma::vec & prices,const arma::mat & v){
 	const double dx = 0.00001;
 	const double delta = 20;

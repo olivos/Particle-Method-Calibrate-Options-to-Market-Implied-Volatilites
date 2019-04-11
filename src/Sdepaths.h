@@ -19,8 +19,8 @@ namespace vSpace {
 class Sdepaths {
 public:
 	Sdepaths(const realSpace & T,const double & S0,
-			double (&a) (const double & t, const arma::vec & Path,const int & end),
-			double (&b) (const double & t, const arma::vec & Path,const int & end),
+			std::function<double  (const double & t, const arma::vec & Path,const int & end)> &a,
+			std::function<double  (const double & t, const arma::vec & Path,const int & end)> &b,
 			const int & N);
 	const arma::vec & getPath (const int & i) const;
 	const arma::mat getPathsMat () const;
