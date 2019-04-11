@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <random>
+#include <armadillo>
 
 #include "topov2.h"
 #include "Sdepaths.h"
@@ -41,6 +42,18 @@ inline double b(const double& t,const arma::vec& Path, const int& end){
 		return Path(end)*0.10; /* high vol */
 	}
 }
+
+inline double b(const double& t,const arma::vec& Path, const int& end,const realSpace & T,const double & sigmaL, const double & sigmaH, const double & days){
+	int delta = days/252*(T.nx+1)/T.xf;
+	int i = max(0,end - delta);
+	if(Path(end) > mean(Path.subvec(i,end))  ){
+		return Path(end)*sigmaL; /* Low vol */
+	}
+	else{
+		return Path(end)*sigmaH; /* high vol */
+	}
+}
+
 inline double price(const double & t){
 	return 100.;
 }
@@ -48,8 +61,12 @@ inline double price(const double & t){
 inline double pay(const double& x, const double & K){
 	return (x-K)>0 ? (x-K):0;
 }
-
-
+arma::vec grad(const arma::vec & K, const arma::vec & prices,const arma::mat & v){
+	const double dx = 0.00001;
+	const double delta = 20;
+	mat g(v.n_rows,2,fill::zeros);
+	std::function<double(const double& t,const arma::vec& Path, const int& end)> f = [v]{return b(t,Path,end,T,)}
+}
 
 int main() {
 
