@@ -24,7 +24,7 @@ public:
 			const int & N);
 	const arma::vec & getPath (const int & i) const;
 	const arma::mat getPathsMat () const;
-	double E(const double & t, double (&f) (const double &) = Ide ) const;
+	double E(const double & t,std::function< double  (const double &)> &f ) const;
 	double V(const double & t) const;
 	vfun pdf(const double & t, int n = 100) ;
 	virtual ~Sdepaths();
@@ -39,17 +39,15 @@ public:
 
 private:
 	const realSpace& T;
-	double (&a) (const double & t, const arma::vec & Path,const int & end);
-	double (&b) (const double & t, const arma::vec & Path,const int & end);
+	std::function<double (const double & t, const arma::vec & Path,const int & end)> &a;
+	std::function<double (const double & t, const arma::vec & Path,const int & end)> &b;
 	const int N;
 	std::vector<arma::vec> Paths;
 	/* To spare computation time the two following are not implemented unless pdf is called !! */
 	arma::vec proba;
 	realSpace logprice;
 
-	static double Ide(const double & x) {
-		return x;
-	}
+//	static std::function< double (const double & x)> Ide= [](const double & x) {return x;};
 	static double square(const double & x) {
 		return pow(x,2);
 	}

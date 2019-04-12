@@ -14,14 +14,14 @@ namespace vSpace {
 
 
 Sdepaths::Sdepaths(const realSpace& T,const double & S0,
-		double (&a)(const double& t,const arma::vec& Path, const int& end),
-		double (&b)(const double& t, const arma::vec& Path, const int& end),
+		std::function<double  (const double & t, const arma::vec & Path,const int & end)> &a,
+		std::function<double  (const double & t, const arma::vec & Path,const int & end)> &b,
 		const int& N):T(T),a(a),b(b),N(N),proba(),logprice()
 {
 	Paths = vector<arma::vec>(N,vec(T.getNx()+1));
 //	vector<mt19937> generators;
 //	generators.reserve(N);
-	mt19937_64 g{};
+	mt19937_64 g;
 
 
 	for(int i = 0 ; i != N ; ++i){
@@ -51,7 +51,7 @@ const arma::vec& Sdepaths::getPath(const int& i) const {
 }
 
 double Sdepaths::E(const double& t,
-		double (&f)(const double&)) const {
+		std::function<double (const double&)> (&f) ) const {
 	double res{0};
 	int j = round( (t-T.getXi()) /T.getHx() );
 
@@ -61,9 +61,9 @@ double Sdepaths::E(const double& t,
 	return res/N;
 }
 
-double Sdepaths::V(const double & t) const {
-	return this->E(t,square)- this->E(t);
-}
+//double Sdepaths::V(const double & t) const {
+//	return this->E(t,square)- this->E(t);
+//}
 
 vfun Sdepaths::pdf(const double& t, int n) {
 //	Find the max
